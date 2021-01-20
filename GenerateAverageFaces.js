@@ -58,7 +58,7 @@ function CreateSubjectConfigs(subjectCount)
 
 function SaveConfigs(configs)
 {
-    fs.writeFile('SubjectConfigs.cfg', `let subjects='${JSON.stringify(configs)}'`, (error) => {
+    fs.writeFile('SubjectConfigs.cfg', `const SUBJECT_CONFIG='${JSON.stringify(configs)}'`, (error) => {
         if (error !== null)
             console.error(error);
     });

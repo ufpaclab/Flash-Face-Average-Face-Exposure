@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Flash-Face Task</title>
+        
+        <!-- Repo -->
+        <base id="base-url" href="https://<USER>.github.io/<REPO>/" target="_blank">
+
+        <!-- jsPsych -->
+        <script src="jspsych/jspsych.js"></script>
+        
+        <!-- jsPsych Plugins -->
+        <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-instructions.js"></script>
+
+        <!-- Style Sheets-->
+        <link href="jspsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+
+        <!-- jsSheet -->
+        <script src="jsSheet/jsSheet.js"></script>
+
+        <!-- Experiment Files -->
+        <script src="Experiment.js"></script>
+
+        <script>
+            Experiment(jsSheet, jsPsych, {survey_code: <?= survey_code ?>})
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

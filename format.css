@@ -1,1 +1,17 @@
-/* Put special formatting here */
+.flashFaceElement {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.flashFaceImage {
+    width: 45%;
+    height: auto;
+}
+
+.flashFaceFixation {
+    font-size: 5vw;
+}
+
+.jspsych-content-wrapper {
+    background-color: white;
+}

@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Flash-Face Task</title>
+        <title>Flash-Face-Average-Face-Exposure</title>
         
         <!-- Repo -->
-        <base id="base-url" href="https://<USER>.github.io/<REPO>/" target="_blank">
+        <!--base id="base-url" href="https://ufpaclab.github.io/Flash-Face-Average-Face-Exposure/" target="_blank"-->
+        <base id="base-url" href="./" target="_blank">
 
         <!-- jsPsych -->
         <script src="jspsych/jspsych.js"></script>
         
         <!-- jsPsych Plugins -->
         <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-html-slider-response.js"></script>
+        <script src="jspsych/plugins/jspsych-survey-multi-choice.js"></script>
+        <script src="jspsych/plugins/jspsych-fullscreen.js"></script>
         <script src="jspsych/plugins/jspsych-instructions.js"></script>
 
         <!-- Style Sheets-->
         <link href="jspsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+        <link href="format.css" rel="stylesheet" type="text/css"></link>
 
         <!-- jsSheet -->
         <script src="jsSheet/jsSheet.js"></script>
 
         <!-- Experiment Files -->
+        <script type="text/javascript" src="SubjectConfigs.cfg"></script>
         <script src="Experiment.js"></script>
 
         <script>
-            Experiment(jsSheet, jsPsych, {survey_code: <?= survey_code ?>})
+            Experiment(jsSheet, jsPsych, {survey_code: 1}//<?= survey_code ?>})
         </script>
     </head>
     <body>

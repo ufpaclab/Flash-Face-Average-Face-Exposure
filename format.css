@@ -8,6 +8,11 @@
     height: auto;
 }
 
+.flashFaceExposure {
+    width: 31%;
+    height: auto;
+}
+
 .flashFaceFixation {
     font-size: 5vw;
 }

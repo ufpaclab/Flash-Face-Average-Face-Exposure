@@ -24,7 +24,6 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                 preloadList.push(`resources/${race}/${race}_${realFace}.jpg`)
             }
         }
-        console.log(preloadList)
         
 
         // Define Experiment Trials
@@ -61,39 +60,6 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             `
         }
 
-        let runWithoutExposure = {
-            type: 'html-keyboard-response',
-            trial_duration: IMAGE_DURATION,
-            choices: jsPsychHandle.NO_KEYS,
-            timeline: [
-                {  
-                    stimulus: function() {
-                        return `
-                        <div class="flashFaceElement">
-                            <img class="flashFaceElement flashFaceImage" src="${jsPsychHandle.timelineVariable('leftFace', true)}"/>
-                            <p class="flashFaceElement flashFaceFixation">+</p>
-                            <img class="flashFaceElement flashFaceImage" src="${jsPsychHandle.timelineVariable('rightFace', true)}"/>
-                        </div>`
-                    }
-                }
-            ],
-            timeline_variables: function() {
-                let trialVariables = []
-                for (let race in SUBJECT) {
-                    let faces = SUBJECT[race].testSet
-                    for (let i = 1; i < faces.length; i += 2) {
-                        trialVariables.push(
-                            {
-                                leftFace: `resources/${race}/${race}_${faces[i - 1]}.jpg`,
-                                rightFace: `resources/${race}/${race}_${faces[i]}.jpg`
-                            }
-                        );
-                    }
-                }
-                return trialVariables;
-            }()
-        }
-
         let measureDistortionTrial = {
             type: 'html-slider-response',
             start: 1,
@@ -106,29 +72,41 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             `
         }
 
-        let createTrialWithExposure = function(race) {
+        function createTrial(race, withExposure) {
             return {
                 type: 'html-keyboard-response',
                 trial_duration: IMAGE_DURATION,
                 choices: jsPsychHandle.NO_KEYS,
-                timeline: [
-                    {
-                        stimulus: function() {
-                            let faces = SUBJECT[race].realSet;
-                            let averageFaceNameNumbers = '';
-                            for (let face of faces) {
-                                averageFaceNameNumbers += `_${face}`
-                            }
-                            let averageFaceName = `resources/${race}${averageFaceNameNumbers}.png`;
-                            return `
+                timeline: function() {
+                    let timelineTrials = [];
+                    if (withExposure) {
+                        timelineTrials.push({
+                            trial_duration: 5000,
+                            stimulus: function() {
+                                let faces = SUBJECT[race].realSet;
+                                let averageFaceNameNumbers = '';
+                                for (let face of faces) {
+                                    averageFaceNameNumbers += `_${face}`
+                                }
+                                let averageFaceName = `resources/${race}${averageFaceNameNumbers}.png`;
+                                return `
+                                <div class="flashFaceElement">
+                                    <img class="flashFaceElement flashFaceExposure" style="padding-right:15%;" src="${averageFaceName}"/>
+                                    <p class="flashFaceElement flashFaceFixation">+</p>
+                                    <img class="flashFaceElement flashFaceExposure" style="padding-left:15%;" src="${averageFaceName}"/>
+                                </div>`
+                            },
+                        });
+                        timelineTrials.push({
+                            trial_duration: 1000,
+                            stimulus: `
                             <div class="flashFaceElement">
-                                <img class="flashFaceElement flashFaceImage" src="${averageFaceName}"/>
                                 <p class="flashFaceElement flashFaceFixation">+</p>
-                                <img class="flashFaceElement flashFaceImage" src="${averageFaceName}"/>
                             </div>`
-                        },
-                    },
-                    {
+                        });
+                    }
+
+                    timelineTrials.push({
                         timeline: [
                             {
                                 stimulus: function() {
@@ -154,20 +132,28 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                             }
                             return trialVariables;
                         }()
-                    }
-                ]
+                    });
+
+                    return timelineTrials;
+                }()
             }
         }
 
-        let runWithExposure = {
-            timeline: function() {
-                let runs = []
-                for (let race in SUBJECT) {
-                    runs.push(createTrialWithExposure(race));
-                }
-                return runs;
-            }()
+        function createRun(withExposure) {
+            return {
+                timeline: function() {
+                    let runs = []
+                    for (let race in SUBJECT) {
+                        runs.push(createTrial(race, withExposure));
+                        runs.push(measureDistortionTrial);
+                    }
+                    return runs;
+                }()
+            }
         }
+
+        let runWithoutExposure = createRun(withExposure = false);
+        let runWithExposure = createRun(withExposure = true);
 
         let exitFullscreenTrial = {
             type: 'fullscreen',
@@ -176,13 +162,13 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
 
         let finalTrial = {
             type: 'instructions',
-            pages: ['Thank you for participating! Please click the right arrow key to receive credit.'],
+            pages: ['Thank you for participating!'],
             allow_keys: false
         }
 
         // Configure and Start Experiment
         jsPsychHandle.init({
-            timeline: [welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, runWithoutExposure, measureDistortionTrial, runWithExposure, measureDistortionTrial, exitFullscreenTrial, finalTrial],
+            timeline: [welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, runWithoutExposure, runWithExposure, exitFullscreenTrial, finalTrial],
             on_trial_finish: session.insert,
             preload_images: preloadList
             //on_finish: function() { window.top.location.href = CREDIT_URL; }

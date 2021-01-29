@@ -166,8 +166,10 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                 timeline: function() {
                     let runs = []
                     for (let race in SUBJECT) {
-                        runs.push(createTrial(race, withExposure));
-                        runs.push(measureDistortionTrial);
+                        for (let i = 0; i < 3; i++)
+                            runs.push(createTrial(race, withExposure));
+                        for (let i = 0; i < 3; i++)
+                            runs.push(measureDistortionTrial);
                     }
                     return runs;
                 }()

@@ -56,7 +56,18 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             message: `
                 <h1>Instructions</h1>
                 <p>Stare at the fixation cross and use your peripheral vision to observe the faces on the left and right.</p>
+                <p>Each pair of faces will appear for less than a second and be followed by a successive pair of faces. After the trial is over, you will be asked to rate the
+                degree of distortion seen in the last pair of faces viewed. There are a total of 5 pairs of faces per slider response, each pair appearing three times each.
+                After you have submitted your response on the slider, the next trial will start immediately.</p>
                 <p>Orient yourself so that you are viewing the screen from 40-50 centimeters away (~2 feet)</p>
+            `
+        }
+
+        let instructionsForExposure = {
+            type: 'html-slider-response',
+            message: `
+            <h1>Exposure Trial</h1>
+            <p>These following 2 trials of the experiment are to get you acquainted with how the experiment will proceed. Your responses will not be recorded. 
             `
         }
 
@@ -69,6 +80,17 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             button_label: 'Submit',
             stimulus: `
                 <p>Rate the amount of distortion seen on the last set of faces</p>
+            `
+        }
+
+        let instructionsForAverageExposure = {
+            type: 'html-keyboard-response',
+            message: `
+            <h1>Average Face Exposure</h1>
+            <p>In these trials, you will be shown the average face based on those used for that trial. The average face will be shown at the start of the trial and you will be given 5
+            seconds to observe it in your central vision. A 1 second blank will be inserted afterwords to signal that the trial will now move on to the set of faces to be observed
+            in peripheral vision. At the conclusion of the trial, you will be asked to rate the degree of distortion you perceived on the last pair of faces in the trial. Once you
+            have submited your answer on the response slider, the next trial will start immediately.</p>
             `
         }
 
@@ -168,7 +190,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
 
         // Configure and Start Experiment
         jsPsychHandle.init({
-            timeline: [welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, runWithoutExposure, runWithExposure, exitFullscreenTrial, finalTrial],
+            timeline: [welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, instructionsForExposure, runWithoutExposure, instructionsForAverageExposure, runWithExposure, exitFullscreenTrial, finalTrial],
             on_trial_finish: session.insert,
             preload_images: preloadList
             //on_finish: function() { window.top.location.href = CREDIT_URL; }

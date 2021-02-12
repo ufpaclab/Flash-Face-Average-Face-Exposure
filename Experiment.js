@@ -6,6 +6,11 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
         const CREDIT_URL = `<CREDIT_URL>&survey_code=${codes.survey_code}`;
         const IMAGE_DURATION = 800
         const SUBJECT = JSON.parse(SUBJECT_CONFIG)[0];
+        const PRACTICE_TRIALS = ["CFD-AF-243-170-N.jpg", "CFD-AF-256-160-N.jpg", "CFD-AM-253-161-N.jpg", "CFD-BF-254-201-N.jpg",
+        "CFD-BM-251-013-N.jpg", "CFD-LF-247-051-N.jpg", "CFD-LF-255-088-N.jpg", "CFD-LM-251-073-N.jpg",
+        "CFD-WF-252-159-N.jpg", "CFD-WM-257-161-N.jpg", "CFD-AF-255-209-N.jpg", "CFD-AM-247-165-N.jpg",
+        "CFD-BF-247-179-N.jpg", "CFD-BM-250-170-N.jpg", "CFD-BM-252-161-N.jpg", "CFD-LF-248-160-N.jpg",
+        "CFD-LM-246-087-N.jpg", "CFD-WF-241-210-N.jpg", "CFD-WM-256-138-N.jpg", "CFD-WM-258-125-N.jpg"];
 
         let preloadList = [];
         for (let race in SUBJECT) {
@@ -69,6 +74,31 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             <h1>Exposure Trial</h1>
             <p>These following 2 trials of the experiment are to get you acquainted with how the experiment will proceed. Your responses will not be recorded. 
             `
+        }
+
+        let practiceTrials = {
+            trial_duration: 5000,
+            stimulus: function() {
+                return `
+                <div class="flashFaceElement">
+                    <img class="flashFaceElement flashFaceImage" src="${jsPsychHandle.timelineVariable('leftFace', true)}"/>
+                    <p class="flashFaceElement flashFaceFixation">+</p>
+                    <img class="flashFaceElement flashFaceImage" src="${jsPsychHandle.timelineVariable('rightFace', true)}"/>
+                </div>`
+            },
+            timeline_variables: function() {
+                let trialVariables = []
+                let faces = PRACTICE_TRIALS;
+                for (let i = 1; i < faces.length; i += 2) {
+                    trialVariables.push(
+                        {
+                            leftFace: `resources/${faces[i - 1]}.jpg`,
+                            rightFace: `resources/${faces[i]}.jpg`
+                        }
+                    );
+                }
+                return trialVariables;
+            }()
         }
 
         let measureDistortionTrial = {
@@ -192,7 +222,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
 
         // Configure and Start Experiment
         jsPsychHandle.init({
-            timeline: [welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, instructionsForExposure, runWithoutExposure, instructionsForAverageExposure, runWithExposure, exitFullscreenTrial, finalTrial],
+            timeline: [welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, instructionsForExposure, practiceTrials, runWithoutExposure, instructionsForAverageExposure, runWithExposure, exitFullscreenTrial, finalTrial],
             on_trial_finish: session.insert,
             preload_images: preloadList
             //on_finish: function() { window.top.location.href = CREDIT_URL; }

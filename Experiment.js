@@ -217,7 +217,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                     for (let race in SUBJECT) {
                         runs.push(createTrial(race, withExposure));
                         for (let i = 0; i < 2; i++)
-                            runs.push(createTrial(race, withExposure = false));
+                            runs.push(createTrial(race, false));
                         runs.push(measureDistortionTrial);
                     }
                     console.log(runs);

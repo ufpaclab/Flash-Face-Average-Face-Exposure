@@ -97,13 +97,15 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             timeline_variables: function() {
                 let trialVariables = []
                 let faces = PRACTICE_TRIALS;
-                for (let i = 1; i < faces.length; i += 2) {
-                    trialVariables.push(
-                        {
-                            leftFace: `resources/PracticeTrial/${faces[i - 1]}`,
-                            rightFace: `resources/PracticeTrial/${faces[i]}`
-                        }
-                    );
+                for (let i = 0; i < 3; i++) {
+                    for (let i = 1; i < faces.length; i += 2) {
+                        trialVariables.push(
+                            {
+                                leftFace: `resources/PracticeTrial/${faces[i - 1]}`,
+                                rightFace: `resources/PracticeTrial/${faces[i]}`
+                            }
+                        );
+                    }
                 }
                 return trialVariables;
             }()
@@ -212,11 +214,10 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             return {
                 timeline: function() {
                     let runs = []
-                    for (let i = 0; i < 3; i++) {
                         for (let race in SUBJECT) {
+                        for (let i = 0; i < 3; i++)
                             runs.push(createTrial(race, withExposure));
-                            runs.push(measureDistortionTrial);
-                        }
+                        runs.push(measureDistortionTrial);
                     }
                     console.log(runs);
                     return runs;

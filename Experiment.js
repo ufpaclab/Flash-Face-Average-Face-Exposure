@@ -74,7 +74,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             type: 'html-keyboard-response',
             stimulus: `
             <h1>Practice Trials</h1>
-            <p>The following 2 trials of the experiment will allow you to get you acquainted with how the procedure. Your responses will not be recorded.</p>
+            <p>The following 2 trials of the experiment will allow you to get you acquainted with the procedure. Your responses will not be recorded.</p>
             `
         }
 

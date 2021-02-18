@@ -4,10 +4,10 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
     function RunExperiment(session) {
         // Define Constants
         const CREDIT_URL = `<CREDIT_URL>&survey_code=${codes.survey_code}`;
-        const IMAGE_DURATION = 800;
-        const AVERAGE_IMAGE_DURATION = 5000;
-        const BLANKING_INTERVAL = 1000;
-        const SUBJECT = JSON.parse(SUBJECT_CONFIG)[0];
+        const IMAGE_DURATION = 1//800;
+        const AVERAGE_IMAGE_DURATION = 1//5000;
+        const BLANKING_INTERVAL = 1//1000;
+        const SUBJECT = JSON.parse(SUBJECT_CONFIG)[session.subject_number];
         const PRACTICE_TRIALS = ["CFD-AF-243-170-N.jpg", "CFD-AF-256-160-N.jpg", "CFD-AM-253-161-N.jpg", "CFD-BF-254-201-N.jpg",
         "CFD-BM-251-013-N.jpg", "CFD-LF-247-051-N.jpg", "CFD-LF-255-088-N.jpg", "CFD-LM-251-073-N.jpg",
         "CFD-WF-252-159-N.jpg", "CFD-WM-257-161-N.jpg", "CFD-AF-255-209-N.jpg", "CFD-AM-247-165-N.jpg",
@@ -220,7 +220,6 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                             runs.push(createTrial(race, false));
                         runs.push(measureDistortionTrial);
                     }
-                    console.log(runs);
                     return runs;
                 }()
             }
@@ -247,8 +246,8 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                 measureDistortionTrial, instructionsForExposure, runWithoutExposure, instructionsForAverageExposure, 
                 runWithExposure, exitFullscreenTrial, finalTrial],
             on_trial_finish: session.insert,
-            preload_images: preloadList
-            //on_finish: function() { window.top.location.href = CREDIT_URL; }
+            preload_images: preloadList,
+            on_finish: function() {session.complete(CREDIT_URL)}
         });
     }
 }

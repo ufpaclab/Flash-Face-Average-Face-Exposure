@@ -4,8 +4,7 @@
         <title>Flash-Face-Average-Face-Exposure</title>
         
         <!-- Repo -->
-        <!--base id="base-url" href="https://ufpaclab.github.io/Flash-Face-Average-Face-Exposure/" target="_blank"-->
-        <base id="base-url" href="../" target="_blank">
+        <base id="base-url" href="https://ufpaclab.github.io/Flash-Face-Average-Face-Exposure/" target="_blank">
 
         <!-- jsPsych -->
         <script src="jspsych/jspsych.js"></script>
@@ -30,7 +29,7 @@
         <script src="Experiment.js"></script>
 
         <script>
-            Experiment(jsSheet, jsPsych, {survey_code: 1})//<?= survey_code ?>})
+            Experiment(jsSheet, jsPsych, {survey_code: <?= survey_code ?> });
         </script>
     </head>
     <body>

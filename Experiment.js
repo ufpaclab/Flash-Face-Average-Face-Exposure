@@ -3,7 +3,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
 
     function RunExperiment(session) {
         // Define Constants
-        const CREDIT_URL = `<CREDIT_URL>&survey_code=${codes.survey_code}`;
+        const CREDIT_URL = `https://app.prolific.com/submissions/complete?cc=418334B5`;
         const IMAGE_DURATION = 800;
         const AVERAGE_IMAGE_DURATION = 5000;
         const BLANKING_INTERVAL = 1000;

@@ -233,12 +233,6 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             fullscreen_mode: false
         }
 
-        let finalTrial = {
-            type: 'instructions',
-            pages: ['Thank you for participating!'],
-            allow_keys: false
-        }
-
         // Configure and Start Experiment
         jsPsychHandle.init({
             timeline: [welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, 

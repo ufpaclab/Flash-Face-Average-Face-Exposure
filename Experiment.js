@@ -238,7 +238,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             timeline: [welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, 
                 practiceTrialInstructions, practiceTrial, measureDistortionTrial, practiceTrial, 
                 measureDistortionTrial, instructionsForExposure, runWithoutExposure, instructionsForAverageExposure, 
-                runWithExposure, exitFullscreenTrial, finalTrial],
+                runWithExposure, exitFullscreenTrial],
             on_trial_finish: session.insert,
             preload_images: preloadList,
             on_finish: function() {session.complete(CREDIT_URL)}

@@ -15,7 +15,7 @@ const jsSheet = {
               }).CompleteSubject(subject_number)
             }
           })
-        }).GetSubjectNumber()
+        }).GetSubject()
       }).GetSessionID()
     }
     else {

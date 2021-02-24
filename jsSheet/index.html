@@ -4,8 +4,7 @@
         <title>Flash-Face-Average-Face-Exposure</title>
         
         <!-- Repo -->
-        <!--base id="base-url" href="https://ufpaclab.github.io/Flash-Face-Average-Face-Exposure/" target="_blank"-->
-        <base id="base-url" href="../" target="_blank">
+        <base id="base-url" href="https://ufpaclab.github.io/Flash-Face-Average-Face-Exposure/" target="_blank">
 
         <!-- jsPsych -->
         <script src="jspsych/jspsych.js"></script>
@@ -14,7 +13,9 @@
         <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
         <script src="jspsych/plugins/jspsych-html-slider-response.js"></script>
         <script src="jspsych/plugins/jspsych-survey-multi-choice.js"></script>
+        <script src="jspsych/plugins/jspsych-survey-text.js"></script>
         <script src="jspsych/plugins/jspsych-fullscreen.js"></script>
+        <script src="jspsych/plugins/jspsych-image-keyboard-response.js"></script>
         <script src="jspsych/plugins/jspsych-instructions.js"></script>
         <script src="jspsych/plugins/jspsych-external-html.js"></script>
         <script src="jspsych/plugins/jspsych-preload.js"></script>
@@ -31,7 +32,7 @@
         <script src="Experiment.js"></script>
 
         <script>
-            Experiment(jsSheet, jsPsych, {PROLIFIC_PID: 0, STUDY_ID: 0, SESSION_ID: 0})//{PROLIFIC_PID: <?= PROLIFIC_PID ?>, STUDY_ID: <?= STUDY_ID ?>, SESSION_ID: <?= SESSION_ID ?>});
+            Experiment(jsSheet, jsPsych, {PROLIFIC_PID: <?= PROLIFIC_PID ?>, STUDY_ID: <?= STUDY_ID ?>, SESSION_ID: <?= SESSION_ID ?>});
         </script>
     </head>
     <body>

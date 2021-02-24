@@ -38,6 +38,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                 for (let practiceFace of PRACTICE_TRIALS) {
                     preloadList.push(`resources/PracticeTrial/${practiceFace}`)
                 }
+                preloadList.push('resources/arm.png');
                 return preloadList
             }(),
             message: `We're almost ready! Please be patient as your experiment loads.`,
@@ -52,6 +53,40 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             `
         };
 
+        let consentFormTrial = {
+            type: 'external-html',
+            url: 'https://ufpaclab.github.io/Consent-Forms/Active/Consent.html',
+            cont_btn: 'consent-button'
+        }
+
+        let getAge = {
+            type: 'survey-text',
+            questions: [{
+                name: 'age',
+                prompt: 'What is your age?',
+                required: true,
+                columns: 3
+            }]
+        }
+
+        let getSex = {
+            type: 'survey-multi-choice',
+            questions: [
+                {
+                    name: 'sex',
+                    prompt: 'What is your sex assigned at birth?',
+                    options: ['Male', 'Female', 'Intersex'],
+                    required: true
+                },
+                {
+                    name: 'gender',
+                    prompt: 'What is your gender?',
+                    options: ['Cis Woman', 'Cis Man', 'Trans Woman', 'Trans Man', 'Non-Binary'],
+                    required: true
+                }
+            ]
+        }
+
         let checkVisionTrial = {
             type: 'survey-multi-choice',
             questions: [{
@@ -62,11 +97,14 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             }]
         };
 
-        let consentFormTrial = {
-            type: 'external-html',
-            url: 'https://ufpaclab.github.io/Consent-Forms/Active/Consent.html',
-            cont_btn: 'consent-button'
-        }
+        let armsLengthInstruction = {
+            type: "image-keyboard-response",
+            stimulus: "resources/arm.png",
+            prompt: `<p>This experiment consists of three parts, each part having multiple trials.</p>
+            <p>Throughout the entirity of the experiment, please sit at an arm's distance from your computer screen, as illustrated above.</p>
+            <p>Your attention should also be focused on the center of your screen.</p>
+            <p> Once you have done so, press any key to continue.</p>`
+        };
 
         let instructionsAndEnterFullscreenTrial = {
             type: 'fullscreen',
@@ -125,17 +163,17 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             type: 'html-keyboard-response',
             stimulus: `
             <h1>Face Exposure</h1>
-            <p>You have completed the practice trials. You will now be exposed to faces matching in race and gender in a similiar manner to the practice trials. Your responses will now be recorded.</p>
+            <p>You have completed the practice trials. You will now be exposed to faces in a similiar manner to the practice trials. Your responses will now be recorded.</p>
             <p>Press any key to continue</p>
             `
         }
 
         let measureDistortionTrial = {
             type: 'html-slider-response',
-            start: 1,
+            slider_start: function() {return Math.floor(Math.random() * 7) + 1},
             min: 1,
             max: 7,
-            labels: ['1', '2', '3', '4', '5', '6', '7'],
+            labels: ['Little or No Distortion', '', '', '', '', '', 'Very Strong Distortion'],
             button_label: 'Submit',
             stimulus: `
                 <p>Rate the amount of distortion seen on the last set of faces</p>
@@ -245,13 +283,24 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
 
         // Configure and Start Experiment
         jsPsychHandle.init({
-            timeline: [preload, welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, 
-                practiceTrialInstructions, practiceTrial, measureDistortionTrial, practiceTrial, 
-                measureDistortionTrial, instructionsForExposure, runWithoutExposure, instructionsForAverageExposure, 
-                runWithExposure, exitFullscreenTrial],
+            timeline: function() {
+                let sessionTimeline = [];
+                sessionTimeline = sessionTimeline.concat([
+                    preload, welcomeTrial, consentFormTrial, getAge, getSex, checkVisionTrial, armsLengthInstruction, 
+                    instructionsAndEnterFullscreenTrial, practiceTrialInstructions, practiceTrial, measureDistortionTrial,
+                    practiceTrial, measureDistortionTrial
+                ]);
+                if (session.subject_number % 2 == 0)
+                    sessionTimeline = sessionTimeline.concat([instructionsForExposure, runWithoutExposure, instructionsForAverageExposure, runWithExposure]);
+                else
+                    sessionTimeline = sessionTimeline.concat([instructionsForAverageExposure, runWithExposure, instructionsForExposure, runWithoutExposure]);
+                sessionTimeline = sessionTimeline.concat([exitFullscreenTrial]);
+                return sessionTimeline
+            }(),
             on_trial_finish: session.insert,
             on_finish: function() {session.complete(CREDIT_URL)},
-            override_safe_mode: true
+            override_safe_mode: true,
+            show_progress_bar: true
         });
     }
 }

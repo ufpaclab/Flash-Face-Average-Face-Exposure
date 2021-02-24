@@ -14,26 +14,36 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
         "CFD-BF-247-179-N.jpg", "CFD-BM-250-170-N.jpg", "CFD-BM-252-161-N.jpg", "CFD-LF-248-160-N.jpg",
         "CFD-LM-246-087-N.jpg", "CFD-WF-241-210-N.jpg", "CFD-WM-256-138-N.jpg", "CFD-WM-258-125-N.jpg"];
 
-        let preloadList = [];
-        for (let race in SUBJECT) {
-            let faces = SUBJECT[race].realSet
-            let averageFaceNameNumbers = '';
-            for (let face of faces) {
-                averageFaceNameNumbers += `_${face}`
-            }
-            preloadList.push(`resources/${race}${averageFaceNameNumbers}.png`)
-
-            for (let testFace of SUBJECT[race].testSet) {
-                preloadList.push(`resources/${race}/${race}_${testFace}.jpg`)
-            }
-
-            for (let realFace of SUBJECT[race].realSet) {
-                preloadList.push(`resources/${race}/${race}_${realFace}.jpg`)
-            }
-        }
-        
-
         // Define Experiment Trials
+        let preload = {
+            type: 'preload',
+            images: function() {
+                let preloadList = [];
+                for (let race in SUBJECT) {
+                    let faces = SUBJECT[race].realSet
+                    let averageFaceNameNumbers = '';
+                    for (let face of faces) {
+                        averageFaceNameNumbers += `_${face}`
+                    }
+                    preloadList.push(`resources/${race}${averageFaceNameNumbers}.png`)
+
+                    for (let testFace of SUBJECT[race].testSet) {
+                        preloadList.push(`resources/${race}/${race}_${testFace}.jpg`)
+                    }
+
+                    for (let realFace of SUBJECT[race].realSet) {
+                        preloadList.push(`resources/${race}/${race}_${realFace}.jpg`)
+                    }
+                }
+                for (let practiceFace of PRACTICE_TRIALS) {
+                    preloadList.push(`resources/PracticeTrial/${practiceFace}`)
+                }
+                return preloadList
+            }(),
+            message: `We're almost ready! Please be patient as your experiment loads.`,
+            show_detailed_errors: true
+        }
+
         let welcomeTrial = {
             type: 'html-keyboard-response',
             stimulus:`
@@ -235,13 +245,13 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
 
         // Configure and Start Experiment
         jsPsychHandle.init({
-            timeline: [welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, 
+            timeline: [preload, welcomeTrial, checkVisionTrial, consentFormTrial, instructionsAndEnterFullscreenTrial, 
                 practiceTrialInstructions, practiceTrial, measureDistortionTrial, practiceTrial, 
                 measureDistortionTrial, instructionsForExposure, runWithoutExposure, instructionsForAverageExposure, 
                 runWithExposure, exitFullscreenTrial],
             on_trial_finish: session.insert,
-            preload_images: preloadList,
-            on_finish: function() {session.complete(CREDIT_URL)}
+            on_finish: function() {session.complete(CREDIT_URL)},
+            override_safe_mode: true
         });
     }
 }

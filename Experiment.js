@@ -45,6 +45,10 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             show_detailed_errors: true
         }
 
+        let enterFullscreen = {
+            type: 'fullscreen'
+        }
+
         let welcomeTrial = {
             type: 'html-keyboard-response',
             stimulus:`
@@ -106,16 +110,26 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             <p> Once you have done so, press any key to continue.</p>`
         };
 
-        let instructionsAndEnterFullscreenTrial = {
-            type: 'fullscreen',
-            message: `
-                <h1>Instructions</h1>
-                <p>Stare at the fixation cross and use your peripheral vision to observe the faces on the left and right.</p>
-                <p>Each pair of faces will appear for less than a second and be followed by a successive pair of faces. After the trial is over, you will be asked to rate the
-                degree of distortion seen in the last pair of faces viewed. There are a total of 5 pairs of faces per slider response, each pair appearing three times each.
-                After you have submitted your response on the slider, the next trial will start immediately.</p>
-                <p>Orient yourself so that you are viewing the screen from 40-50 centimeters away (~2 feet)</p>
-            `
+        let cameraInit = {
+            type: 'webgazer-init-camera'
+        };
+
+        var cameraCalibrate = {
+            type: 'webgazer-calibrate',
+            calibration_points: [[25,50], [50,50], [75,50], [50,25], [50,75]],
+            calibration_mode: 'click'
+        }
+
+        let generalInstructions = {
+            type: 'html-keyboard-response',
+            stimulus: `
+            <h1>Instructions</h1>
+            <p>Stare at the fixation cross and use your peripheral vision to observe the faces on the left and right.</p>
+            <p>Each pair of faces will appear for less than a second and be followed by a successive pair of faces. After the trial is over, you will be asked to rate the
+            degree of distortion seen in the last pair of faces viewed. There are a total of 5 pairs of faces per slider response, each pair appearing three times each.
+            After you have submitted your response on the slider, the next trial will start immediately.</p>
+            <p>Orient yourself so that you are viewing the screen from 40-50 centimeters away (~2 feet)</p>
+        `
         }
 
         let practiceTrialInstructions = {
@@ -196,6 +210,14 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                 type: 'html-keyboard-response',
                 trial_duration: IMAGE_DURATION,
                 choices: jsPsychHandle.NO_KEYS,
+                extensions: [
+                    {
+                        type: 'webgazer',
+                        params: {
+                            targets: ['.flashFaceFixation']
+                        }
+                    }
+                ],
                 timeline: function() {
                     let timelineTrials = [];
                     if (withExposure) {
@@ -286,8 +308,8 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             timeline: function() {
                 let sessionTimeline = [];
                 sessionTimeline = sessionTimeline.concat([
-                    preload, welcomeTrial, consentFormTrial, getAge, getSex, checkVisionTrial, armsLengthInstruction, 
-                    instructionsAndEnterFullscreenTrial, practiceTrialInstructions, practiceTrial, measureDistortionTrial,
+                    enterFullscreen, preload, welcomeTrial, consentFormTrial, getAge, getSex, checkVisionTrial, armsLengthInstruction, 
+                    cameraInit, cameraCalibrate, generalInstructions, practiceTrialInstructions, practiceTrial, measureDistortionTrial,
                     practiceTrial, measureDistortionTrial
                 ]);
                 if (session.subject_number % 2 == 0)
@@ -300,7 +322,10 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             on_trial_finish: session.insert,
             on_finish: function() {session.complete(CREDIT_URL)},
             override_safe_mode: true,
-            show_progress_bar: true
+            show_progress_bar: true,
+            extensions: [
+                {type: 'webgazer'}
+            ]
         });
     }
 }

@@ -19,6 +19,10 @@
         <script src="jspsych/plugins/jspsych-instructions.js"></script>
         <script src="jspsych/plugins/jspsych-external-html.js"></script>
         <script src="jspsych/plugins/jspsych-preload.js"></script>
+        <script src="jspsych/plugins/jspsych-webgazer-init-camera.js"></script>
+        <script src="jspsych/plugins/jspsych-webgazer-calibrate.js"></script>
+        <script src="jspsych/plugins/jspsych-webgazer-validate.js"></script>
+        <script src="jspsych/extensions/jspsych-ext-webgazer.js"></script>
 
         <!-- Style Sheets-->
         <link href="jspsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
@@ -29,7 +33,8 @@
 
         <!-- Experiment Files -->
         <script type="text/javascript" src="SubjectConfigs.cfg"></script>
-        <script src="Experiment.js"></script>
+        <script type="text/javascript" src="webgazer.js"></script>
+        <script type="text/javascript" src="Experiment.js"></script>
 
         <script>
             Experiment(jsSheet, jsPsych, {PROLIFIC_PID: <?= PROLIFIC_PID ?>, STUDY_ID: <?= STUDY_ID ?>, SESSION_ID: <?= SESSION_ID ?>});

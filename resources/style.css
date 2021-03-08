@@ -1,0 +1,35 @@
+#consent-form {
+  margin: auto;
+  width: 8.5in;
+  margin-top: 1in;
+  margin-bottom: 1in;
+  padding: 0.5in;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  text-align: left;
+  line-height: normal;
+  font-size: 12px;
+  font-family: "Times New Roman", Times, serif;
+  background-color: white;
+}
+
+#consent-title { 
+  font-style: italic;
+}
+
+#consent-logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+}
+
+.consent-header {
+  font-weight: bold;
+  color: rgb(0, 112, 192);
+}
+
+.consent-text-block {
+  white-space: pre-line;
+}

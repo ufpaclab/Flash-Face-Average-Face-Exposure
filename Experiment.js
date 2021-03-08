@@ -7,7 +7,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
         const IMAGE_DURATION = 800;
         const AVERAGE_IMAGE_DURATION = 5000;
         const BLANKING_INTERVAL = 1000;
-        const SUBJECT = JSON.parse(SUBJECT_CONFIG)[session.subject_number];
+        const SUBJECT = SUBJECT_CONFIG[session.subject_number];
         const PRACTICE_TRIALS = ["CFD-AF-243-170-N.jpg", "CFD-AF-256-160-N.jpg", "CFD-AM-253-161-N.jpg", "CFD-BF-254-201-N.jpg",
         "CFD-BM-251-013-N.jpg", "CFD-LF-247-051-N.jpg", "CFD-LF-255-088-N.jpg", "CFD-LM-251-073-N.jpg",
         "CFD-WF-252-159-N.jpg", "CFD-WM-257-161-N.jpg", "CFD-AF-255-209-N.jpg", "CFD-AM-247-165-N.jpg",
@@ -59,7 +59,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
 
         let consentFormTrial = {
             type: 'external-html',
-            url: 'https://ufpaclab.github.io/Consent-Forms/Active/Consent.html',
+            url: 'resources/Consent.html',
             cont_btn: 'consent-button'
         }
 
@@ -96,7 +96,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             questions: [{
                 name: 'vision',
                 prompt: 'Do you have normal or correct-to-normal vision?',
-                options: ['Normal', 'Corrected-to-Normal', 'Other'],
+                options: ['Normal', 'Corrected-to-Normal (i.e., wear glasses or contacts)', 'Other'],
                 required: true
             }]
         };
@@ -104,31 +104,67 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
         let armsLengthInstruction = {
             type: "image-keyboard-response",
             stimulus: "resources/arm.png",
-            prompt: `<p>This experiment consists of three parts, each part having multiple trials.</p>
-            <p>Throughout the entirity of the experiment, please sit at an arm's distance from your computer screen, as illustrated above.</p>
+            prompt: `<p>This experiment consists of three parts, with each part having multiple trials.</p>
+            <p>Throughout the entirety of the experiment, please sit at an arm's distance from your computer screen, as illustrated above.</p>
             <p>Your attention should also be focused on the center of your screen.</p>
             <p> Once you have done so, press any key to continue.</p>`
         };
 
         let cameraInit = {
-            type: 'webgazer-init-camera'
+            type: 'webgazer-init-camera',
+            instructions: `<p>The <b>ONLY</b> webcam data collected is the point on the screen you are looking at. No images or recordings will ever leave your computer.</p>
+            <p>Position your head so that the webcam has a good view of your eyes.</p>
+            <p>Use the video in the upper-left corner as a guide. Center your face in the box and look directly towards the camera.</p>
+            <p>It is important that you try and keep your head reasonably still throughout the experiment, so please take a moment to adjust your setup as needed.</p>
+            <p>When your face is centered in the box and the box turns green, you can click to continue.</p>`
         };
 
-        var cameraCalibrate = {
+        let chinrest = {
+            type: "virtual-chinrest",
+            blindspot_reps: 3,
+            resize_units: "none",
+            pixels_per_unit: 50,
+        };
+
+        let cameraCalibrateInstructions = {
+            type: 'html-keyboard-response',
+            stimulus:`
+                <p>The following even will calibrate our eyetracking. Please focus on, then left mouse click the black dots as they appear.</p>
+                <p>Press any key to begin.</p>
+            `
+        }
+
+        let cameraCalibrate = {
             type: 'webgazer-calibrate',
             calibration_points: [[25,50], [50,50], [75,50], [50,25], [50,75]],
             calibration_mode: 'click'
         }
 
+        let cameraValidationInstructions = {
+            type: 'html-keyboard-response',
+            stimulus:`
+                <p>The following event will test the accuracy of our eye tracking. Please focus on the black dots as they appear.</p>
+                <p>Press any key to begin.</p>
+            `
+        }
+
+        let cameraValidation = {
+            type: 'webgazer-validate',
+            validation_points: [[-200,-200], [-200,200], [200,-200], [200,200]],
+            validation_point_coordinates: 'center-offset-pixels',
+            show_validation_data: true
+          }
+
         let generalInstructions = {
             type: 'html-keyboard-response',
             stimulus: `
             <h1>Instructions</h1>
-            <p>Stare at the fixation cross and use your peripheral vision to observe the faces on the left and right.</p>
+            <p>In this experiment, stare at the fixation cross and use your peripheral vision to observe the faces on the left and right.</p>
             <p>Each pair of faces will appear for less than a second and be followed by a successive pair of faces. After the trial is over, you will be asked to rate the
             degree of distortion seen in the last pair of faces viewed. There are a total of 5 pairs of faces per slider response, each pair appearing three times each.
             After you have submitted your response on the slider, the next trial will start immediately.</p>
             <p>Orient yourself so that you are viewing the screen from 40-50 centimeters away (~2 feet)</p>
+            <p>press any key to continue.</p>
         `
         }
 
@@ -136,7 +172,8 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             type: 'html-keyboard-response',
             stimulus: `
             <h1>Practice Trials</h1>
-            <p>The following 2 trials of the experiment will allow you to get you acquainted with the procedure. Your responses will not be recorded.</p>
+            <p>The following phase of the experiment will allow you to get you acquainted with the procedure. Your responses will not be recorded.</p>
+            <p>press any key to continue.</p>
             `
         }
 
@@ -202,6 +239,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             seconds to observe it in your central vision. A 1 second blank will be inserted afterwords to signal that the trial will now move on to the set of faces to be observed
             in peripheral vision. At the conclusion of the trial, you will be asked to rate the degree of distortion you perceived on the last pair of faces in the trial. Once you
             have submited your answer on the response slider, the next trial will start immediately.</p>
+            <p>press any key to continue.</p>
             `
         }
 
@@ -309,13 +347,13 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                 let sessionTimeline = [];
                 sessionTimeline = sessionTimeline.concat([
                     enterFullscreen, preload, welcomeTrial, consentFormTrial, getAge, getSex, checkVisionTrial, armsLengthInstruction, 
-                    cameraInit, cameraCalibrate, generalInstructions, practiceTrialInstructions, practiceTrial, measureDistortionTrial,
-                    practiceTrial, measureDistortionTrial
+                    chinrest, cameraInit, generalInstructions, practiceTrialInstructions, practiceTrial,
+                    measureDistortionTrial, practiceTrial, measureDistortionTrial, cameraCalibrateInstructions, cameraCalibrate
                 ]);
                 if (session.subject_number % 2 == 0)
-                    sessionTimeline = sessionTimeline.concat([instructionsForExposure, runWithoutExposure, instructionsForAverageExposure, runWithExposure]);
+                    sessionTimeline = sessionTimeline.concat([instructionsForExposure, runWithoutExposure, cameraValidationInstructions, cameraValidation, instructionsForAverageExposure, runWithExposure, cameraValidationInstructions, cameraValidation]);
                 else
-                    sessionTimeline = sessionTimeline.concat([instructionsForAverageExposure, runWithExposure, instructionsForExposure, runWithoutExposure]);
+                    sessionTimeline = sessionTimeline.concat([instructionsForAverageExposure, runWithExposure, cameraValidationInstructions, cameraValidation, instructionsForExposure, runWithoutExposure, cameraValidationInstructions, cameraValidation]);
                 sessionTimeline = sessionTimeline.concat([exitFullscreenTrial]);
                 return sessionTimeline
             }(),

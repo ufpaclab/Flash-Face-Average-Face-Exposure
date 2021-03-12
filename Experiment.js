@@ -129,7 +129,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
         let cameraCalibrateInstructions = {
             type: 'html-keyboard-response',
             stimulus:`
-                <p>The following even will calibrate our eyetracking. Please focus on, then left mouse click the black dots as they appear.</p>
+                <p>The following event will calibrate our eyetracking. Please focus on, then left mouse click the black dots as they appear.</p>
                 <p>Press any key to begin.</p>
             `
         }

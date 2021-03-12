@@ -346,7 +346,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             timeline: function() {
                 let sessionTimeline = [];
                 sessionTimeline = sessionTimeline.concat([
-                    enterFullscreen, preload, welcomeTrial, consentFormTrial, getAge, getSex, checkVisionTrial, armsLengthInstruction, 
+                    preload, enterFullscreen, welcomeTrial, consentFormTrial, getAge, getSex, checkVisionTrial, armsLengthInstruction, 
                     chinrest, cameraInit, generalInstructions, practiceTrialInstructions, practiceTrial,
                     measureDistortionTrial, practiceTrial, measureDistortionTrial, cameraCalibrateInstructions, cameraCalibrate
                 ]);

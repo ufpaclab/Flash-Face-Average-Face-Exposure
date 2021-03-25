@@ -53,7 +53,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             type: 'html-keyboard-response',
             stimulus:`
                 <p>Welcome to the experiment.</p>
-                <p>Press any key to begin.</p>
+                <p>Press any key to continue</p>
             `
         };
 
@@ -107,7 +107,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             prompt: `<p>This experiment consists of three parts, with each part having multiple trials.</p>
             <p>Throughout the entirety of the experiment, please sit at an arm's distance from your computer screen, as illustrated above.</p>
             <p>Your attention should also be focused on the center of your screen.</p>
-            <p> Once you have done so, press any key to continue.</p>`
+            <p>Press any key to continue</p>`
         };
 
         let cameraInit = {
@@ -159,12 +159,11 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             type: 'html-keyboard-response',
             stimulus: `
             <h1>Instructions</h1>
-            <p>In this experiment, stare at the fixation cross and use your peripheral vision to observe the faces on the left and right.</p>
+            <p>In each trial in this experiment, you will stare at the central fixation cross at all times and use your peripheral vision to observe faces on the left and right side of the screen</p>
             <p>Each pair of faces will appear for less than a second and be followed by a successive pair of faces. After the trial is over, you will be asked to rate the
             degree of distortion seen in the last pair of faces viewed. There are a total of 5 pairs of faces per slider response, each pair appearing three times each.
             After you have submitted your response on the slider, the next trial will start immediately.</p>
-            <p>Orient yourself so that you are viewing the screen from 40-50 centimeters away (~2 feet)</p>
-            <p>press any key to continue.</p>
+            <p>Press any key to continue</p>
         `
         }
 
@@ -173,7 +172,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             stimulus: `
             <h1>Practice Trials</h1>
             <p>The following phase of the experiment will allow you to get you acquainted with the procedure. Your responses will not be recorded.</p>
-            <p>press any key to continue.</p>
+            <p>Press any key to continue</p>
             `
         }
 
@@ -197,7 +196,8 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                 let trialVariables = []
                 let faces = PRACTICE_TRIALS;
                 for (let i = 0; i < 3; i++) {
-                    for (let i = 1; i < faces.length; i += 2) {
+                    let OnlyDoHalfOfTheFaces = faces.length / 2;
+                    for (let i = 1; i < OnlyDoHalfOfTheFaces; i += 2) {
                         trialVariables.push(
                             {
                                 leftFace: `resources/PracticeTrial/${faces[i - 1]}`,
@@ -236,10 +236,10 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             stimulus: `
             <h1>Average Face Exposure</h1>
             <p>In these trials, you will be shown the average face based on those used for that trial. The average face will be shown at the start of the trial and you will be given 5
-            seconds to observe it in your central vision. A 1 second blank will be inserted afterwords to signal that the trial will now move on to the set of faces to be observed
+            seconds to observe it in your peripheral vision. A 1 second blank will be inserted afterwords to signal that the trial will now move on to the set of faces to be observed
             in peripheral vision. At the conclusion of the trial, you will be asked to rate the degree of distortion you perceived on the last pair of faces in the trial. Once you
             have submited your answer on the response slider, the next trial will start immediately.</p>
-            <p>press any key to continue.</p>
+            <p>Press any key to continue</p>
             `
         }
 

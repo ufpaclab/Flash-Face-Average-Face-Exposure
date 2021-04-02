@@ -3,7 +3,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
 
     function RunExperiment(session) {
         // Define Constants
-        const CREDIT_URL = `https://app.prolific.com/submissions/complete?cc=418334B5`;
+        const CREDIT_URL = `https://app.prolific.com/submissions/complete`;
         const IMAGE_DURATION = 800;
         const AVERAGE_IMAGE_DURATION = 5000;
         const BLANKING_INTERVAL = 1000;
@@ -56,12 +56,6 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                 <p>Press any key to continue</p>
             `
         };
-
-        let consentFormTrial = {
-            type: 'external-html',
-            url: 'resources/Consent.html',
-            cont_btn: 'consent-button'
-        }
 
         let getAge = {
             type: 'survey-text',
@@ -353,7 +347,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             timeline: function() {
                 let sessionTimeline = [];
                 sessionTimeline = sessionTimeline.concat([
-                    preload, enterFullscreen, welcomeTrial, consentFormTrial, getAge, getSex, checkVisionTrial, grabACreditCard, armsLengthInstruction, 
+                    preload, enterFullscreen, welcomeTrial, getAge, getSex, checkVisionTrial, grabACreditCard, armsLengthInstruction, 
                     cameraInit, chinrest, cameraCalibrateInstructions, cameraCalibrate, generalInstructions, practiceTrialInstructions, practiceTrial,
                     measureDistortionTrial, practiceTrial, measureDistortionTrial
                 ]);

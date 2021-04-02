@@ -98,7 +98,8 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
         let grabACreditCard = {
             type: 'html-keyboard-response',
             stimulus:`
-                First, grab a credit card sized object! You'll need it in a second for scale. Keep it close by, so you won't have to move to grab it.
+                <p>First, grab a credit card sized object! You'll need it in a second for scale. Keep it close by, so you won't have to move to grab it.</p>
+                <p>Press any key to continue</p>
             `
         };
 

@@ -101,6 +101,13 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             }]
         };
 
+        let grabACreditCard = {
+            type: 'html-keyboard-response',
+            stimulus:`
+                First, grab a credit card sized object! You'll need it in a second for scale. Keep it close by, so you won't have to move to grab it.
+            `
+        };
+
         let armsLengthInstruction = {
             type: "image-keyboard-response",
             stimulus: "resources/arm.png",
@@ -129,7 +136,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
         let cameraCalibrateInstructions = {
             type: 'html-keyboard-response',
             stimulus:`
-                <p>The following event will calibrate our eyetracking. Please focus on, then left mouse click the black dots as they appear.</p>
+                <p>The following event will calibrate our eyetracking. Please focus on dots as they appear, and then left-click each one with your mouse.</p>
                 <p>Press any key to begin.</p>
             `
         }
@@ -346,9 +353,9 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             timeline: function() {
                 let sessionTimeline = [];
                 sessionTimeline = sessionTimeline.concat([
-                    preload, enterFullscreen, welcomeTrial, consentFormTrial, getAge, getSex, checkVisionTrial, armsLengthInstruction, 
-                    chinrest, cameraInit, generalInstructions, practiceTrialInstructions, practiceTrial,
-                    measureDistortionTrial, practiceTrial, measureDistortionTrial, cameraCalibrateInstructions, cameraCalibrate
+                    preload, enterFullscreen, welcomeTrial, consentFormTrial, getAge, getSex, checkVisionTrial, grabACreditCard, armsLengthInstruction, 
+                    cameraInit, chinrest, cameraCalibrateInstructions, cameraCalibrate, generalInstructions, practiceTrialInstructions, practiceTrial,
+                    measureDistortionTrial, practiceTrial, measureDistortionTrial
                 ]);
                 if (session.subject_number % 2 == 0)
                     sessionTimeline = sessionTimeline.concat([instructionsForExposure, runWithoutExposure, cameraValidationInstructions, cameraValidation, instructionsForAverageExposure, runWithExposure, cameraValidationInstructions, cameraValidation]);

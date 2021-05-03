@@ -15,6 +15,12 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
         "CFD-LM-246-087-N.jpg", "CFD-WF-241-210-N.jpg", "CFD-WM-256-138-N.jpg", "CFD-WM-258-125-N.jpg"];
 
         // Define Experiment Trials
+        let consentFormTrial = {
+            type: 'external-html',
+            url: 'resources/Consent.html',
+            cont_btn: 'consent-button'
+        }
+
         let preload = {
             type: 'preload',
             images: function() {
@@ -154,7 +160,6 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             type: 'webgazer-validate',
             validation_points: [[-200,-200], [-200,200], [200,-200], [200,200]],
             validation_point_coordinates: 'center-offset-pixels',
-            show_validation_data: true
           }
 
         let generalInstructions = {
@@ -343,12 +348,20 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             fullscreen_mode: false
         }
 
+        let finalTrial = {
+            type: 'html-keyboard-response',
+            stimulus:`
+                <p>Thank you for participating!</p>
+                <p>Press any key to recieve credit</p>
+            `
+        };
+
         // Configure and Start Experiment
         jsPsychHandle.init({
             timeline: function() {
                 let sessionTimeline = [];
                 sessionTimeline = sessionTimeline.concat([
-                    preload, enterFullscreen, welcomeTrial, getAge, getSex, checkVisionTrial, grabACreditCard, armsLengthInstruction, 
+                    consentFormTrial, preload, enterFullscreen, welcomeTrial, getAge, getSex, checkVisionTrial, grabACreditCard, armsLengthInstruction,
                     cameraInit, chinrest, cameraCalibrateInstructions, cameraCalibrate, generalInstructions, practiceTrialInstructions, practiceTrial,
                     measureDistortionTrial, practiceTrial, measureDistortionTrial
                 ]);
@@ -356,7 +369,7 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
                     sessionTimeline = sessionTimeline.concat([instructionsForExposure, runWithoutExposure, cameraValidationInstructions, cameraValidation, instructionsForAverageExposure, runWithExposure, cameraValidationInstructions, cameraValidation]);
                 else
                     sessionTimeline = sessionTimeline.concat([instructionsForAverageExposure, runWithExposure, cameraValidationInstructions, cameraValidation, instructionsForExposure, runWithoutExposure, cameraValidationInstructions, cameraValidation]);
-                sessionTimeline = sessionTimeline.concat([exitFullscreenTrial]);
+                sessionTimeline = sessionTimeline.concat([exitFullscreenTrial, finalTrial]);
                 return sessionTimeline
             }(),
             on_trial_finish: session.insert,
@@ -364,7 +377,12 @@ function Experiment(jsSheetHandle, jsPsychHandle, codes) {
             override_safe_mode: true,
             show_progress_bar: true,
             extensions: [
-                {type: 'webgazer'}
+                {
+                    type: 'webgazer', 
+                    params: {
+                        sampling_interval: IMAGE_DURATION / 8,
+                    }
+                }
             ]
         });
     }
